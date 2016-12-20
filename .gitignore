@@ -32,3 +32,4 @@ npm-debug.log
 # Ignore
 .idea/*
 npm-debug.log.*
+bower_components/

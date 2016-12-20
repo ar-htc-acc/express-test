@@ -1,0 +1,21 @@
+{
+  "name": "notes",
+  "description": "",
+  "main": "",
+  "authors": [
+    "Louis_Huang <ar.htc.acc@gmail.com>"
+  ],
+  "license": "GPL",
+  "homepage": "https://github.com/ar-htc-acc/express-test",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "3.3.6"
+  }
+}
