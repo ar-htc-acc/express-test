@@ -30,6 +30,6 @@ node_modules
 npm-debug.log
 
 # Ignore
-.idea/*
+.idea/
 npm-debug.log.*
 bower_components/
