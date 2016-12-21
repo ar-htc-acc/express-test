@@ -3,7 +3,12 @@
 var util = require('util');
 var express = require('express');
 var router = express.Router();
-var notes = require('../models/notes-memory');
+
+var path = require('path');
+var notes = require(process.env.NOTES_MODEL ? path.join('..', process.env.NOTES_MODEL) : '../models/notes-memory');
+
+const log = require('debug')('notes:router-notes');
+const error = require('debug')('notes:error');
 
 // add Note:
 router.get('/add', (req, res, next) => {

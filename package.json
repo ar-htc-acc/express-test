@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "start": "set DEBUG=notes:* & node ./bin/www",
+    "start-fs": "set NOTES_MODEL=models/notes-fs&& set DEBUG=notes:* && node ./bin/www",
     "server1": "set PORT=3001 & node ./bin/www",
     "server2": "set PORT=3002 & node ./bin/www",
     "postinstall": "bower install"
@@ -14,6 +15,7 @@
     "debug": "~2.2.0",
     "ejs": "~2.5.2",
     "express": "~4.14.0",
+    "fs-extra": "^1.0.0",
     "morgan": "~1.7.0",
     "serve-favicon": "~2.3.0"
   },

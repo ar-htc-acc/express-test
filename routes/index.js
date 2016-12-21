@@ -1,13 +1,16 @@
+'use strict';
+
+const log = require('debug')('notes:router-home');
+const error = require('debug')('notes:error');
+
 var express = require('express');
 var router = express.Router();
-var notes = require('../models/notes-memory');
 
-var debug = require('debug')('notes:index');
+var path = require('path');
+var notes = require(process.env.NOTES_MODEL ? path.join('..', process.env.NOTES_MODEL) : '../models/notes-memory');
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
-
-    debug('Getting home page: %s', new Date());
 
     notes.keylist()
         .then(keylist => {
