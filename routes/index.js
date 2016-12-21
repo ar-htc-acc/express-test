@@ -3,7 +3,7 @@ var router = express.Router();
 var notes = require('../models/notes-memory');
 
 /* GET home page. */
-router.get('/', function(req, res, next) {
+router.get('/', function (req, res, next) {
     notes.keylist()
         .then(keylist => {
             var keyPromises = [];
@@ -18,7 +18,12 @@ router.get('/', function(req, res, next) {
             return Promise.all(keyPromises);
         })
         .then(notelist => {
-            res.render('index', {title: 'Notes', notelist: notelist});
+            res.render('index',
+                {
+                    title: 'Notes',
+                    notelist: notelist,
+                    breadcrumbs: [{href: '/', text: 'Home'}]
+                });
         })
         .catch(err => next(err));
 });
