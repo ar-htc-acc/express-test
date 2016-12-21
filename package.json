@@ -5,6 +5,7 @@
   "scripts": {
     "start": "set DEBUG=notes:* & node ./bin/www",
     "start-fs": "set NOTES_MODEL=models/notes-fs&& set DEBUG=notes:* && node ./bin/www",
+    "start-mongodb": "set NOTES_MODEL=models/notes-mongodb&& node ./bin/www",
     "server1": "set PORT=3001 & node ./bin/www",
     "server2": "set PORT=3002 & node ./bin/www",
     "postinstall": "bower install"
@@ -16,6 +17,7 @@
     "ejs": "~2.5.2",
     "express": "~4.14.0",
     "fs-extra": "^1.0.0",
+    "mongodb": "^2.2.16",
     "morgan": "~1.7.0",
     "serve-favicon": "~2.3.0"
   },
