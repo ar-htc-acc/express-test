@@ -5,7 +5,8 @@
   "scripts": {
     "start": "set DEBUG=express-test:* & node ./bin/www",
     "server1": "set PORT=3001 & node ./bin/www",
-    "server2": "set PORT=3002 & node ./bin/www"
+    "server2": "set PORT=3002 & node ./bin/www",
+    "postinstall": "bower install"
   },
   "dependencies": {
     "body-parser": "~1.15.2",

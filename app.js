@@ -27,6 +27,10 @@ app.use('/', index);
 // app.use('/users', users);
 app.use('/notes', notes);
 
+// static files:
+app.use('/vendor/bootstrap', express.static(path.join(__dirname, 'bower_components', 'bootstrap', 'dist')));
+app.use('/vendor/jquery', express.static(path.join(__dirname, 'bower_components', 'jquery', 'dist')));
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   var err = new Error('Not Found');
