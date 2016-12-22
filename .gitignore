@@ -35,3 +35,5 @@ npm-debug.log.*
 bower_components/
 
 notes-fs-data/
+
+notes.sqlite3

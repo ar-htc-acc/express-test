@@ -8,6 +8,8 @@
     "start-mongodb": "set NOTES_MODEL=models/notes-mongodb&& node ./bin/www",
     "server1": "set PORT=3001 & node ./bin/www",
     "server2": "set PORT=3002 & node ./bin/www",
+    "sqlite3-setup": "sqlite3 notes.sqlite3 --init models/schema-sqlite3.sql",
+    "start-sqlite3": "set DEBUG=notes:* & set SQLITE_FILE=notes.sqlite3&& set NOTES_MODEL=models/notes-sqlite3&& node ./bin/www",
     "postinstall": "bower install"
   },
   "dependencies": {
@@ -19,7 +21,8 @@
     "fs-extra": "^1.0.0",
     "mongodb": "^2.2.16",
     "morgan": "~1.7.0",
-    "serve-favicon": "~2.3.0"
+    "serve-favicon": "~2.3.0",
+    "sqlite3": "^3.1.8"
   },
   "devDependencies": {
     "bower": "^1.8.0"
