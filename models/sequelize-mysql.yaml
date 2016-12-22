@@ -1,0 +1,7 @@
+dbname: express
+username: root
+password: admin
+params:
+    host: localhost
+    port: 3306
+    dialect: mysql
