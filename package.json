@@ -3,15 +3,10 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "set DEBUG=notes:* & node ./bin/www",
-    "start-fs": "set NOTES_MODEL=models/notes-fs&& set DEBUG=notes:* && node ./bin/www",
-    "start-mongodb": "set NOTES_MODEL=models/notes-mongodb&& node ./bin/www",
-    "server1": "set PORT=3001 & node ./bin/www",
-    "server2": "set PORT=3002 & node ./bin/www",
-    "sqlite3-setup": "sqlite3 notes.sqlite3 --init models/schema-sqlite3.sql",
-    "start-sqlite3": "set DEBUG=notes:* & set SQLITE_FILE=notes.sqlite3&& set NOTES_MODEL=models/notes-sqlite3&& node ./bin/www",
-    "start-sequelize-mysql": "mysql.bat",
-    "postinstall": "bower install"
+    "start": "set SEQUELIZE_CONNECT=models/sequelize-mysql.yaml&& set NOTES_MODEL=models/notes-sequelize&& set USERS_MODEL=models/users-rest&& set USER_SERVICE_URL=http://localhost:3333&& node ./bin/www",
+    "postinstall": "bower install",
+    "bootstrapsetup": "cd bower_components/bootstrap && npm install && npm install grunt-cli ",
+    "buildbootstrap": "cp variables.less bower_components/bootstrap/less && cd bower_components/bootstrap && grunt"
   },
   "dependencies": {
     "body-parser": "~1.15.2",
@@ -19,6 +14,7 @@
     "debug": "~2.2.0",
     "ejs": "~2.5.2",
     "express": "~4.14.0",
+    "express-session": "^1.14.2",
     "fs-extra": "^1.0.0",
     "js-yaml": "^3.7.0",
     "mongodb": "^2.2.16",
@@ -29,6 +25,7 @@
     "restify": "^4.3.0",
     "sequelize": "^3.28.0",
     "serve-favicon": "~2.3.0",
+    "session-file-store": "^0.2.2",
     "sqlite3": "^3.1.8"
   },
   "devDependencies": {

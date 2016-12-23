@@ -30,6 +30,7 @@ router.get('/', function (req, res, next) {
                 {
                     title: 'Notes',
                     notelist: notelist,
+                    user: req.user ? req.user : undefined,
                     breadcrumbs: [{href: '/', text: 'Home'}]
                 });
         })

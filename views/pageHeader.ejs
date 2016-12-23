@@ -1,8 +1,14 @@
 <header class="page-header">
     <h1><%= title %></h1>
 
-    <% if (typeof hideAddNote === 'undefined') { %>
+    <% if (user && typeof hideAddNote === 'undefined') { %>
     <a class="btn btn-primary" href='/notes/add'>ADD Note</a>
+    <% } %>
+    <% if (user) { %>
+    <a class="btn btn-primary" href="/users/logout">
+        Log Out <span class="badge"><%= user.username %></span></a>
+    <% } else { %>
+    <a class="btn btn-primary" href="/users/login">Log in</a>
     <% } %>
 
     <% if (typeof breadcrumbs !== 'undefined' && breadcrumbs) { %>

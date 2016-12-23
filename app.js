@@ -5,6 +5,9 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
+const session = require('express-session');
+const FileStore = require('session-file-store')(session);
+
 var index = require('./routes/index');
 var users = require('./routes/users');
 var notes = require('./routes/notes');
@@ -22,6 +25,8 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+users.initPassport(app);
 
 app.use('/', index);
 app.use('/users', users.router);
@@ -48,5 +53,13 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
+
+// set up session:
+app.use(session({
+    store: new FileStore({path: 'sessions'}),
+    secret: 'keyboard mouse',
+    resave: true,
+    saveUninitialized: true
+}));
 
 module.exports = app;

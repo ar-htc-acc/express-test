@@ -23,7 +23,6 @@ exports.ensureAuthenticated = function (req, res, next) {
 }
 
 router.get('/login', function (req, res, next) {
-    log(util.inspect(req));
     res.render('login', {
         title: "Login to Notes",
         user: req.user

@@ -10,13 +10,16 @@ var notes = require(process.env.NOTES_MODEL ? path.join('..', process.env.NOTES_
 const log = require('debug')('notes:router-notes');
 const error = require('debug')('notes:error');
 
+const usersRouter = require('./users');
+
 // add Note:
-router.get('/add', (req, res, next) => {
+router.get('/add', usersRouter.ensureAuthenticated, (req, res, next) => {
     res.render('noteedit', {
         title: "Add a Note",
         docreate: true,
         notekey: "",
         note: undefined,
+        user: req.user ? req.user : undefined,
         breadcrumbs: [
             { href: '/', text: 'Home' },
             { active: true, text: "Add Note" }
@@ -25,7 +28,7 @@ router.get('/add', (req, res, next) => {
     });
 });
 
-router.post('/save', (req, res, next) => {
+router.post('/save', usersRouter.ensureAuthenticated, (req, res, next) => {
     var p;
     if (req.body.docreate === "create") {
         p = notes.create(req.body.notekey, req.body.title, req.body.body);
@@ -44,6 +47,7 @@ router.get('/view', (req, res, next) => {
                 title: note ? note.title : "",
                 notekey: req.query.key,
                 note: note,
+                user: req.user ? req.user : undefined,
                 breadcrumbs: [
                     { href: '/', text: 'Home' },
                     { active: true, text: note.title }
@@ -53,7 +57,7 @@ router.get('/view', (req, res, next) => {
         .catch(err => next(err));
 })
 
-router.get('/edit', (req, res, next) => {
+router.get('/edit', usersRouter.ensureAuthenticated, (req, res, next) => {
     notes.read(req.query.key)
         .then(note => {
             res.render('noteedit', {
@@ -62,6 +66,7 @@ router.get('/edit', (req, res, next) => {
                 notekey: req.query.key,
                 note: note,
                 hideAddNote: true,
+                user: req.user ? req.user : undefined,
                 breadcrumbs: [
                     { href: '/', text: 'Home' },
                     { active: true, text: note.title }
@@ -71,13 +76,14 @@ router.get('/edit', (req, res, next) => {
         .catch(err => next(err));
 });
 
-router.get('/destroy', (req, res, next) => {
+router.get('/destroy', usersRouter.ensureAuthenticated, (req, res, next) => {
     notes.read(req.query.key)
         .then(note => {
             res.render('notedestroy', {
                 title: note ? note.title : "",
                 notekey: req.query.key,
                 note: note,
+                user: req.user ? req.user : undefined,
                 breadcrumbs: [
                     { href: '/', text: 'Home' },
                     { active: true, text: 'Delete Note' }
@@ -87,7 +93,7 @@ router.get('/destroy', (req, res, next) => {
         .catch(err => next(err));
 });
 
-router.post('/destroy/confirm', (req, res, next) => {
+router.post('/destroy/confirm', usersRouter.ensureAuthenticated, (req, res, next) => {
     notes.destroy(req.body.notekey)
         .then(() => {
             res.redirect('/');
