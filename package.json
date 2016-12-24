@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "set SEQUELIZE_CONNECT=models/sequelize-mysql.yaml&& set NOTES_MODEL=models/notes-sequelize&& set USERS_MODEL=models/users-rest&& set USER_SERVICE_URL=http://localhost:3333&& node ./bin/www",
+    "start": "set DEBUG=notes:* && set SEQUELIZE_CONNECT=models/sequelize-mysql.yaml&& set NOTES_MODEL=models/notes-sequelize&& set USERS_MODEL=models/users-rest&& set USER_SERVICE_URL=http://localhost:3333&& node ./bin/www",
     "postinstall": "bower install",
     "bootstrapsetup": "cd bower_components/bootstrap && npm install && npm install grunt-cli ",
     "buildbootstrap": "cp variables.less bower_components/bootstrap/less && cd bower_components/bootstrap && grunt"

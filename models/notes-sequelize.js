@@ -79,7 +79,7 @@ exports.read = function (key) {
         });
 };
 
-exports.destroy = function () {
+exports.destroy = function (key) {
     return exports.connectDB()
         .then(SQNote => {
             return SQNote.find({where: {key: key}})
