@@ -65,7 +65,7 @@ app.use('/users', users.router);
 app.use('/notes', notes);
 
 index.socketio(io);
-//notes.socketio(io);
+notes.socketio(io);
 
 // static files:
 app.use('/vendor/bootstrap', express.static(path.join(__dirname, 'bower_components', 'bootstrap', 'dist')));

@@ -103,3 +103,25 @@ router.post('/destroy/confirm', usersRouter.ensureAuthenticated, (req, res, next
 });
 
 module.exports = router;
+
+module.exports.socketio = function(io) {
+    var nspView = io.of('/view');
+    var forNoteViewClients = function(cb) {
+        nspView.clients((err, clients) => {
+            clients.forEach(id => {
+                cb(nspView.connected[id]);
+            });
+        });
+    };
+
+    notes.events.on('noteupdate',  newnote => {
+        forNoteViewClients(socket => {
+            socket.emit('noteupdate', newnote);
+        });
+    });
+    notes.events.on('notedestroy', data => {
+        forNoteViewClients(socket => {
+            socket.emit('notedestroy', data);
+        });
+    });
+};
