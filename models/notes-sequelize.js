@@ -49,7 +49,15 @@ exports.create = function(key, title, body) {
                 title: title,
                 body: body
             });
-        });
+        })
+        .then(newnote => {
+            exports.events.noteCreated({
+                key: newnote.key,
+                title: newnote.title,
+                body: newnote.body
+            });
+            return newnote;
+        })
 };
 
 exports.update = function (key, title, body) {
@@ -65,6 +73,14 @@ exports.update = function (key, title, body) {
                         });
                     }
                 });
+        })
+        .then(newnote => {
+            exports.events.noteUpdate({
+                key,
+                title: newnote.title,
+                body: newnote.body
+            });
+            return newnote;
         });
 };
 
@@ -84,7 +100,8 @@ exports.destroy = function (key) {
         .then(SQNote => {
             return SQNote.find({where: {key: key}})
                 .then(note => note.destroy());
-        });
+        })
+        .then(() => exports.events.noteDestroy({key}));
 };
 
 exports.keylist = function () {
@@ -104,3 +121,5 @@ exports.count = function () {
         });
     });
 };
+
+exports.events = require('./notes-events');

@@ -41,8 +41,8 @@ router.get('/logout', function (req, res, next) {
 });
 
 passport.use(new TwitterStrategy({
-        consumerKey: "B7TjYbvOgPztGujYYGUcyX4GM",
-        consumerSecret: "zTKoy6hFSgHf94TOL8qTLdejQ703uYCGDpQEhxike0hHnl3Ez5",
+        consumerKey: "09s29rrD7BeKKCNe4Zq9e4Uhs",
+        consumerSecret: "yfiUlJpzusAX8izuqBx48zKsbVaHuvYfznXPNDtbeZdaxDIvVj",
         callbackURL: "http://35.166.70.111:3000/users/auth/twitter/callback"
     },
     function(token, tokenSecret, profile, done) {

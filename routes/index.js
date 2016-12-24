@@ -10,31 +10,79 @@ var path = require('path');
 var notes = require(process.env.NOTES_MODEL ? path.join('..', process.env.NOTES_MODEL) : '../models/notes-memory');
 
 /* GET home page. */
-router.get('/', function (req, res, next) {
-
-    notes.keylist()
-        .then(keylist => {
-            var keyPromises = [];
-            for (var key of keylist) {
-                keyPromises.push(
-                    notes.read(key)
-                        .then(note => {
-                            return {key: note.key, title: note.title};
-                        })
-                );
-            }
-            return Promise.all(keyPromises);
-        })
-        .then(notelist => {
-            res.render('index',
-                {
-                    title: 'Notes',
-                    notelist: notelist,
-                    user: req.user ? req.user : undefined,
-                    breadcrumbs: [{href: '/', text: 'Home'}]
-                });
-        })
-        .catch(err => next(err));
+router.get('/', function(req, res, next) {
+    getKeyTitlesList().then(notelist => {
+        var user = req.user ? req.user : undefined;
+        res.render('index', {
+            title: 'Notes',
+            notelist: notelist,
+            user: user,
+            breadcrumbs: [{ href: '/', text: 'Home' }]
+        });
+    })
+        .catch(err => { error('home page '+ err); next(err); });
 });
 
 module.exports = router;
+
+var getKeyTitlesList = function() {
+    return notes.keylist()
+        .then(keylist => {
+            var keyPromises = keylist.map(key => {
+                return notes.read(key).then(note => {
+                    return { key: note.key, title: note.title };
+                });
+            });
+            return Promise.all(keyPromises);
+        });
+};
+
+module.exports.socketio = function (io) {
+    var emitNoteTitles = () => {
+        getKeyTitlesList().then(notelist => {
+            io.of('/home').emit('notetitles', {notelist});
+        });
+    };
+    notes.events.on('notecreated', emitNoteTitles);
+    notes.events.on('noteupdate', emitNoteTitles);
+    notes.events.on('notedestroy', emitNoteTitles);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
