@@ -39,6 +39,9 @@ var getKeyTitlesList = function() {
 
 module.exports.socketio = function (io) {
     var emitNoteTitles = () => {
+
+        log('[debug]: emitNoteTitles triggered.');
+
         getKeyTitlesList().then(notelist => {
             io.of('/home').emit('notetitles', {notelist});
         });

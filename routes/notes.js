@@ -32,6 +32,7 @@ router.post('/save', usersRouter.ensureAuthenticated, (req, res, next) => {
     var p;
     if (req.body.docreate === "create") {
         p = notes.create(req.body.notekey, req.body.title, req.body.body);
+        log('[debug]: notes saved!');
     } else {
         p = notes.update(req.body.notekey, req.body.title, req.body.body);
     }

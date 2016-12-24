@@ -51,6 +51,7 @@ exports.create = function(key, title, body) {
             });
         })
         .then(newnote => {
+            log('[debug]: note is created...sequelize: ' + newnote);
             exports.events.noteCreated({
                 key: newnote.key,
                 title: newnote.title,
