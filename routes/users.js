@@ -7,7 +7,8 @@ const express  = require('express');
 const router   = express.Router();
 exports.router = router;
 const passport = require('passport');
-const LocalStrategy = require('passport-local').Strategy;
+const TwitterStrategy = require('passport-twitter').Strategy;
+
 const usersModel = require(process.env.USERS_MODEL
     ? path.join('..', process.env.USERS_MODEL)
     : '../models/users-rest');
@@ -39,18 +40,36 @@ router.get('/logout', function (req, res, next) {
     res.redirect('/');
 });
 
-passport.use(new LocalStrategy(function (username, password, done) {
-    usersModel.userPasswordCheck(username, password)
-        .then(check => {
-            if (check.check) {
-                done(null, {id: check.username, username: check.username});
-            } else {
-                done(null, false, check.message);
-            }
-            return check;
+passport.use(new TwitterStrategy({
+        consumerKey: "B7TjYbvOgPztGujYYGUcyX4GM",
+        consumerSecret: "zTKoy6hFSgHf94TOL8qTLdejQ703uYCGDpQEhxike0hHnl3Ez5",
+        callbackURL: "http://35.166.70.111:3000/users/auth/twitter/callback"
+    },
+    function(token, tokenSecret, profile, done) {
+        usersModel.findOrCreate({
+            id: profile.username,
+            username: profile.username,
+            password: "",
+            provider: profile.provider,
+            familyName: profile.displayName,
+            givenName: "",
+            middleName: "",
+            photos: profile.photos,
+            emails: profile.emails
         })
-        .catch(err => done(err));
-}));
+            .then(user => done(null, user))
+            .catch(err => done(err));
+    }
+));
+
+router.get('/auth/twitter', passport.authenticate('twitter'));
+
+router.get('/auth/twitter/callback',
+    passport.authenticate('twitter',
+        {
+            successRedirect: '/',
+            failureRedirect: '/users/login'
+        }));
 
 passport.serializeUser(function (user, done) {
     done(null, user.username);
