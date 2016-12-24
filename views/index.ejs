@@ -6,33 +6,27 @@
 <body>
 <div class="container-fluid">
     <% include pageHeader %>
-    <% if (notelist.length > 0) { %>
-    <div class="row">
-        <div class="col-xs-12">
-            <div class="btn-group-vertical" role="group" style="width: 100%;" id="notetitles">
-                <%
-                for (var note of notelist) {
-                %>
+
+    <div class="row"><div class="col-xs-12">
+            <div id="notetitles" class="btn-group-vertical" role="group" style="width: 100%;">
+                <% for (var note of notelist) { %>
                 <a class="btn btn-lg btn-block btn-default" href="/notes/view?key=<%= note.key %>">
                     <%= note.title %>
                 </a>
-                <%
-                }
-                %>
+                <% } %>
             </div>
-            <% } %>
-        </div>
-    </div>
+        </div></div>
+
     <% include footer %>
 
     <script src="/socket.io/socket.io.js"></script>
     <script>
         $(document).ready(function () {
+            console.log('[debug] socket.io init..');
+
             var socket = io('/home');
             socket.on('notetitles', function(data) {
-
-                console.log('[debug] Got data: ' + data);
-
+                console.log('[debug] received data: ' + data);
                 var notelist = data.notelist;
                 $('#notetitles').empty();
                 for (var i = 0; i < notelist.length; i++) {
@@ -44,6 +38,7 @@
             });
         });
     </script>
+
 </div>
 </body>
 </html>

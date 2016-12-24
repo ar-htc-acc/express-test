@@ -34,14 +34,6 @@ io.use(passportSocketIo.authorize({
     store:        sessionStore
 }));
 
-app.use(session({
-    store: sessionStore,
-    secret: sessionSecret,
-    key: sessionCookie,
-    resave: true,
-    saveUninitialized: true
-}));
-
 var port = normalizePort(process.env.PORT || '3000');
 app.set('port', port);
 
@@ -59,8 +51,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // set up session:
 app.use(session({
-    store: new FileStore({path: 'sessions'}),
-    secret: 'keyboard mouse',
+    store: sessionStore,
+    secret: sessionSecret,
+    key: sessionCookie,
     resave: true,
     saveUninitialized: true
 }));
