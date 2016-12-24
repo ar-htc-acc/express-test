@@ -9,7 +9,7 @@ const path = require('path');
 const fs   = require('fs');
 const favicon = require('serve-favicon');
 const logger = require('morgan');
-const FileStreamRotator = require('file-stream-rotator');
+//const FileStreamRotator = require('file-stream-rotator');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const session = require('express-session')
@@ -55,15 +55,15 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
 var accessLogStream;
-if (process.env.REQUEST_LOG_FILE) {
-    var logDirectory = path.dirname(process.env.REQUEST_LOG_FILE);
-    fs.existsSync(logDirectory) || fs.mkdirSync(logDirectory);
-    accessLogStream = FileStreamRotator.getStream({
-        filename: process.env.REQUEST_LOG_FILE,
-        frequency: 'daily',
-        verbose: false
-    });
-}
+// if (process.env.REQUEST_LOG_FILE) {
+//     var logDirectory = path.dirname(process.env.REQUEST_LOG_FILE);
+//     fs.existsSync(logDirectory) || fs.mkdirSync(logDirectory);
+//     accessLogStream = FileStreamRotator.getStream({
+//         filename: process.env.REQUEST_LOG_FILE,
+//         frequency: 'daily',
+//         verbose: false
+//     });
+// }
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
