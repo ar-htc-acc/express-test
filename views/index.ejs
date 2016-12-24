@@ -30,6 +30,9 @@
         $(document).ready(function () {
             var socket = io('/home');
             socket.on('notetitles', function(data) {
+
+                console.log('[debug] Got data: ' + data);
+
                 var notelist = data.notelist;
                 $('#notetitles').empty();
                 for (var i = 0; i < notelist.length; i++) {
