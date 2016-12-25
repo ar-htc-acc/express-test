@@ -55,7 +55,7 @@ module.exports.postMessage = function (from, namespace, message) {
                 message: newmsg.message,
                 timestamp: newmsg.timestamp
             };
-            modules.exports.emit('newmessage', toEmit);
+            module.exports.emit('newmessage', toEmit);
         });
 };
 
