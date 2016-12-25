@@ -11,6 +11,7 @@ const log = require('debug')('notes:router-notes');
 const error = require('debug')('notes:error');
 
 const usersRouter = require('./users');
+const messagesModel = require('../models/messages-sequelize');
 
 // add Note:
 router.get('/add', usersRouter.ensureAuthenticated, (req, res, next) => {
@@ -104,8 +105,37 @@ router.post('/destroy/confirm', usersRouter.ensureAuthenticated, (req, res, next
 
 module.exports = router;
 
+router.post('/make-comment', usersRouter.ensureAuthenticated, (req, res, next) => {
+    messagesModel.postMessage(req.body.from, req.body.namespace, req.body.message)
+        .then(results => { res.status(200).json({}); })
+        .catch(err => { res.status(500).end(err.stack); });
+});
+
+router.post('/del-message', usersRouter.ensureAuthenticated, (req, res, next) => {
+    messagesModel.destroyMessage(req.body.id, req.body.namespace)
+        .then(results => {
+            res.status(200).json({});
+        })
+        .catch(err => {
+            res.status(500).end(err.stack);
+        });
+});
+
 module.exports.socketio = function(io) {
+
     var nspView = io.of('/view');
+    nspView.on('connection', function(socket) {
+        // 'cb' is a function sent from the browser, to which we
+        // send the messages for the named note.
+        log(`/view connected on ${socket.id}`);
+        socket.on('getnotemessages', (namespace, cb) => {
+            log('getnotemessages ' + namespace);
+            messagesModel.recentMessages(namespace)
+                .then(cb)
+                .catch(err => console.error(err.stack));
+        });
+    });
+
     var forNoteViewClients = function(cb) {
         nspView.clients((err, clients) => {
             clients.forEach(id => {
@@ -114,14 +144,60 @@ module.exports.socketio = function(io) {
         });
     };
 
+    messagesModel.on('newmessage',  newmsg => {
+        forNoteViewClients(socket => { socket.emit('newmessage', newmsg); });
+    });
+    messagesModel.on('destroymessage',  data => {
+        forNoteViewClients(socket => { socket.emit('destroymessage', data); });
+    });
+
     notes.events.on('noteupdate',  newnote => {
-        forNoteViewClients(socket => {
-            socket.emit('noteupdate', newnote);
-        });
+        forNoteViewClients(socket => { socket.emit('noteupdate', newnote); });
     });
     notes.events.on('notedestroy', data => {
-        forNoteViewClients(socket => {
-            socket.emit('notedestroy', data);
-        });
+        forNoteViewClients(socket => { socket.emit('notedestroy', data); });
+        messagesModel.destroyMessages('/view-'+ data.key)
+            .catch(err => console.error(err.stack));
     });
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
